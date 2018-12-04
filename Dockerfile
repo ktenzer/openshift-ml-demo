@@ -38,7 +38,7 @@ RUN wget https://github.com/mozilla/DeepSpeech/releases/download/v0.3.0/deepspee
 
 RUN rm -f /deepspeech/deepspeech-0.3.0-models.tar
 
-RUN git clone https://github.com/ktenzer/gpu-demo.git /deepspeech/gpu-demo
+RUN git clone https://github.com/ktenzer/openshift-ml-demo.git /deepspeech/openshift-ml-demo
 
 COPY demo.wav /deepspeech
 

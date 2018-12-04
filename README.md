@@ -40,5 +40,5 @@ A python script is provided in the container under the /deepspeech directory. It
 
 Note: The machine learned models are very basic and as such accuracy is not nearly as high as it could be. I estimate around 60%. For real-world usage a much more robust model is needed.
 ```
-$ /deepspeech/python2 stream_with_sentences.py --lang <en|de|es|pl> --file </path/to/.wav> --models </path/to/models>
+$ /deepspeech/openshift-ml-demo/python2 stream_with_sentences.py --lang <en|de|es|pl> --file </path/to/.wav> --models </path/to/models>
 ```
