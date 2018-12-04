@@ -33,8 +33,13 @@ RUN cd /tmp/deepspeech && \
 
 RUN rm -rf /tmp/deepspeech
 
+RUN mkdir /app
+
+RUN cd /app && \
+    git clone https://github.com/iboernig/openshift-ml-demo.git /app/repo
+
 RUN mkdir /deepspeech
 
-RUN echo "1.0" > /etc/imageversion
+RUN echo "2.0" > /etc/imageversion
 
-CMD /bin/bash /deepspeech/gpu-demo/startup.sh
+CMD /bin/bash /app/repo/startup.sh
