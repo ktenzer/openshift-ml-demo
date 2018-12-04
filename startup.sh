@@ -8,9 +8,6 @@ if [ ! -d /deepspeech/models ]; then
     rm -f /deepspeech/deepspeech-0.3.0-models.tar
 fi
 
-if [ ! -d /deepspeach/gpu-demo ]
-    git clone https://github.com/iboernig/openshift-ml-demo.git /deepspeech/gpu-demo
-
 while true; do
   sleep 10
   echo "Waiting for command"
