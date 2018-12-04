@@ -1,5 +1,5 @@
 # openshift-ml-demo
-Uses deepspeech and tensorflow to recognize voice recording in english and translate using google translate to the desired language. Output of what was recognized in the recording and translation done to stdout.
+This is a machine learning demo that uses deepspeech and tensorflow to recognize voice recording in english and translate using google translate to the desired language. Output of what was recognized in the recording and translation done to stdout.
 
 The inital work using deepspeech and google translate was done by [melwitt](https://github.com/melwitt/gpu-demo.git). 
 
