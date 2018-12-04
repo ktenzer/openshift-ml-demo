@@ -44,4 +44,4 @@ COPY demo.wav /deepspeech
 
 RUN echo "1.0" > /etc/imageversion
 
-CMD read
+CMD ["tail -f"]
