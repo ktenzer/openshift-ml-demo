@@ -31,12 +31,33 @@ $ docker run -i -t <image id>
 ```
 
 ## Running in OpenShift
+To deploy and run on OpenShift you can use the template or deploy from Dockerfile. The template will also create a persistent storage volume so you need persistent storage for that. The models which are large (several GB) are stored on volume. This allows for a fast build. Using Dockerfile means that the models end up in the container themselves. The models are downloaded the first time the container is built and run.
+
+### Clone repository
+```
+$ git clone https://github.com/ktenzer/openshift-ml-demo.git
+```
+### Create new project
+```
+$ oc new-project ml-demo
+```
+### Create template in ml-demo project
+```
+$ oc create -f openshift-ml-demo/openshift-ml-demo.yaml
+```
+### Deploy template from project
+```
+$ oc new-app openshift-ml-demo -n ml-deml
+```
+### Deploy just using Docker in OpenShift
 ```
 $ oc new-app https://github.com/ktenzer/openshift-ml-demo.git
 ```
 
 ## Usage
-A python script is provided in the container under the /deepspeech directory. It takes a translation language, path to a wave file and path to pre-built machine learned models. The script will decode the audo file and output audo to text and at the same time translate to the translation language. Accuracy and error correction on text are also performed. 
+Once deployed either with OpenShift or Docker use the provided python script stream_with_sentences.py in the container under the /app/repo directory. It takes a translation language, path to a wave file and path to pre-built machine learned models. The script will decode the audo file and output audo to text and at the same time translate to the translation language. Accuracy and error correction on text are also performed. 
+
+We have provided a demo.wav audio sample for testing also located under the /app/repo directory.
 
 Note: The machine learned models are very basic and as such accuracy is not nearly as high as it could be. I estimate around 60%. For real-world usage a much more robust model is needed.
 ```
