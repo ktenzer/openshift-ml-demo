@@ -35,7 +35,7 @@ RUN rm -rf /tmp/deepspeech
 
 RUN mkdir /app
 
-RUN git clone https://github.com/ktenzer/openshift-ml-demo.git /deepspeech/openshift-ml-demo
+RUN git clone https://github.com/ktenzer/openshift-ml-demo.git /app/repo
 
 RUN mkdir /deepspeech
 
