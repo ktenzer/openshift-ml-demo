@@ -166,7 +166,7 @@ parameters:
   - name: SOURCE_REPOSITORY_URL
     displayName: Source Repository URL
     description: The URL of the repository with your application source code
-    value: https://github.com/iboernig/openshift-ml-demo.git
+    value: https://github.com/ktenzer/openshift-ml-demo.git
     required: true
   - name: SOURCE_REPOSITORY_REF
     displayName: Source Repository Reference Tag
