@@ -91,6 +91,8 @@ objects:
           imagePullPolicy: IfNotPresent
           name: "${APPLICATION_NAME}"
           terminationMessagePath: /dev/termination-log
+          ports:
+          -containerPort: 8080
           volumeMounts:
           - mountPath: /deepspeech
             name: "${APPLICATION_NAME}-model-data"
