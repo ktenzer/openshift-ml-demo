@@ -10,10 +10,14 @@ RUN dnf install -y python2 \
     git \
     wget \
     swig \
+    npm \
     langpacks-de \
     langpacks-es \
     langpacks-fr \
-    langpacks-pl
+    langpacks-pl 
+
+RUN node -v
+RUN npm -v
 
 RUN mkdir -p /tmp/deepspeech
 
@@ -38,6 +42,14 @@ RUN mkdir /app
 RUN git clone https://github.com/ktenzer/openshift-ml-demo.git /app/repo
 
 RUN mkdir /deepspeech
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app/
+RUN npm install
+
+COPY . /usr/src/app
 
 RUN echo "2.0" > /etc/imageversion
 

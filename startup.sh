@@ -11,7 +11,9 @@ fi
 echo "connect to the container and try"
 echo "python2 /app/repo/stream_with_sentences.py --lang de --file /app/repo/demo.wav --models /deepspeech/models" 
 
-while true; do
-  sleep 10
-  echo -n "."
-done
+npm start
+
+#while true; do
+#  sleep 10
+#  echo -n "."
+#done
