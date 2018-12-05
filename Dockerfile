@@ -15,7 +15,7 @@ RUN dnf install -y python2 \
     langpacks-fr \
     langpacks-pl
 
-RUN mkdir /deepspeech
+RUN mkdir -p /tmp/deepspeech
 
 RUN pip2 install 'deepspeech==0.3.0' \
     jamspell \
@@ -26,23 +26,19 @@ RUN pip2 install 'deepspeech==0.3.0' \
     idna \
     chardet
 
-RUN cd /deepspeech && \
+RUN cd /tmp/deepspeech && \
     git clone https://github.com/BoseCorp/py-googletrans.git && \
-    cd /deepspeech/py-googletrans && \
-    python2 /deepspeech/py-googletrans/setup.py install
+    cd /tmp/deepspeech/py-googletrans && \
+    python2 /tmp/deepspeech/py-googletrans/setup.py install
 
-RUN rm -rf /deepspeech/py-googletrans
+RUN rm -rf /tmp/deepspeech
 
-RUN wget https://github.com/mozilla/DeepSpeech/releases/download/v0.3.0/deepspeech-0.3.0-models.tar.gz -P /deepspeech && \
-    tar xzf /deepspeech/deepspeech-0.3.0-models.tar.gz -C /deepspeech
-
-RUN rm -f /deepspeech/deepspeech-0.3.0-models.tar
+RUN mkdir /app
 
 RUN git clone https://github.com/ktenzer/openshift-ml-demo.git /deepspeech/openshift-ml-demo
 
-COPY demo.wav /deepspeech
+RUN mkdir /deepspeech
 
-RUN echo "1.0" > /etc/imageversion
+RUN echo "2.0" > /etc/imageversion
 
-CMD ["-c", "--", "while true; do sleep 30; done;"]
-ENTRYPOINT ["/bin/bash"]
+CMD /bin/bash /app/repo/startup.sh
