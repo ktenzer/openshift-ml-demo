@@ -61,9 +61,11 @@ RUN chown -R 1001:0 /app && \
 #    chmod -R ug+rwX /usr/src/app
     chmod -R ug+rwX /app
 
+RUN chmod -R 777 /tmp
+
 RUN echo "2.0" > /etc/imageversion
 
-#USER 1001
+USER 1001
 
 #CMD /bin/bash /app/repo/startup.sh
 CMD /bin/bash /app/startup.sh
