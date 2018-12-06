@@ -49,9 +49,12 @@ WORKDIR /app
 
 #COPY package.json /usr/src/app/
 #COPY package.json /app/
-RUN npm install
+#RUN npm install
 
 #COPY . /usr/src/app
+COPY . /app
+
+RUN npm install
 
 RUN chown -R 1001:0 /app && \
 #RUN chown -R 1001:0 /usr/src/app && \
