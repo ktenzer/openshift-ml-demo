@@ -54,8 +54,8 @@ COPY . /usr/src/app
 RUN chown -R 1001:0 /usr/src/app
 RUN chmod -R ug+rwx /usr/src/app
 
-USER 1001
-
 RUN echo "2.0" > /etc/imageversion
+
+USER 1001
 
 CMD /bin/bash /app/repo/startup.sh
