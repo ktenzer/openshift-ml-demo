@@ -11,5 +11,6 @@
   "dependencies": {
     "formidable": "*",
     "http": "*"
+    "fs": "*"
   }
 }
