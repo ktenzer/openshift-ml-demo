@@ -21,6 +21,17 @@ objects:
     selector:
       app: ${APPLICATION_NAME}
 - apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
+    name: ${APPLICATION_NAME}
+  spec:
+    host: ${APPLICATION_DOMAIN}
+    to:
+      kind: Service
+      name: ${APPLICATION_NAME}
+- apiVersion: v1
   kind: BuildConfig
   metadata:
     annotations:
@@ -163,6 +174,9 @@ parameters:
     description: the name and label for all components
     value: openshift-ml-demo
     required: true
+  - name: APPLICATION_DOMAIN
+    displayName: Application Domain
+    description: Application domain name used in route to service
   - name: SOURCE_REPOSITORY_URL
     displayName: Source Repository URL
     description: The URL of the repository with your application source code

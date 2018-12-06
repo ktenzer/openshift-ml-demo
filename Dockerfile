@@ -39,23 +39,28 @@ RUN rm -rf /tmp/deepspeech
 
 RUN mkdir /app
 
-RUN git clone https://github.com/ktenzer/openshift-ml-demo.git /app/repo
+#RUN git clone https://github.com/ktenzer/openshift-ml-demo.git /app/repo
 
 RUN mkdir /deepspeech
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+#RUN mkdir -p /usr/src/app
+#WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package.json /usr/src/app/
+#COPY package.json /usr/src/app/
+#COPY package.json /app/
 RUN npm install
 
-COPY . /usr/src/app
+#COPY . /usr/src/app
 
-RUN chown -R 1001:0 /usr/src/app && \
-    chmod -R ug+rwX /usr/src/app
+RUN chown -R 1001:0 /app && \
+#RUN chown -R 1001:0 /usr/src/app && \
+#    chmod -R ug+rwX /usr/src/app
+    chmod -R ug+rwX /app
 
 RUN echo "2.0" > /etc/imageversion
 
-USER 1001
+#USER 1001
 
-CMD /bin/bash /app/repo/startup.sh
+#CMD /bin/bash /app/repo/startup.sh
+CMD /bin/bash /app/startup.sh
