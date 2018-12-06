@@ -51,10 +51,10 @@ RUN npm install
 
 COPY . /usr/src/app
 
-USER 1001
+RUN chown -R 1001:0 /usr/src/app
+RUN chmod -R ug+rwx /usr/src/app
 
-RUN chown -R 1001:0 /usr/src/app && \
-    chmod -R ug+rwX /usr/src/app && 
+USER 1001
 
 RUN echo "2.0" > /etc/imageversion
 
