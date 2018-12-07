@@ -43,10 +43,10 @@ app.use(bodyParser.urlencoded({
           console.log('renamed complete');  
         });
 
-       const execSync = require('child_process').execSync;
-       var python_cmd = 'python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
-       run_python = execSync(python_cmd);
-       //run_python = execSync('python2 translate.py --lang de --file demo.wav --models /home/fedora/models');
+        const execSync = require('child_process').execSync;
+        var python_cmd = 'python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
+        run_python = execSync(python_cmd);
+        //run_python = execSync('python2 translate.py --lang de --file demo.wav --models /home/fedora/models');
 
         function display_stdout(callback) {
           var spawn = require('child_process').spawn;
@@ -60,10 +60,11 @@ app.use(bodyParser.urlencoded({
           });
           console.log(result);
         }
-        display_stdout(function(result) { res.send(result) });
+        //display_stdout(function(result) { res.send(result) });
+        res.send("this is test");
     });
 });
-var server = app.listen(8080, function() {
+var server = app.listen(80, function() {
 console.log('Listening on port %d', server.address().port);
 });
 server.timeout = 500000;
