@@ -15,14 +15,9 @@ http.createServer(function (req, res) {
         function runSingleCommandWithWait() {
           Promise.coroutine(function *() {
             var response = yield cmd.run('node --version');
-            if(response.success) {
-              // do something
-              // if success get stdout info in message. like response.message
-            } else {
-              // do something
-              // if not success get error message and stdErr info as error and stdErr. 
-              //like response.error and response.stdErr
-            }
+            if (err) throw err;
+            res.write(response.message);
+            res.end();
             console.log('Executed your command :)');
           })();
         }
