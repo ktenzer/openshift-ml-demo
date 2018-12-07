@@ -66,4 +66,4 @@ app.use(bodyParser.urlencoded({
 var server = app.listen(8080, function() {
 console.log('Listening on port %d', server.address().port);
 });
-server.timeout = 5000;
+server.timeout = 500000;
