@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({
         //Formidable changes the name of the uploaded file
         //Rename the file to its original name
 //        fs.rename(files.fileUploaded.path, '/home/ktenzer/openshift-ml-demo/'+files.fileUploaded.name, function(err) {
-        mv(files.fileUploaded.path, '/home/ktenzer/openshift-ml-demo/'+files.fileUploaded.name, function(err) {
+        mv(files.fileUploaded.path, '/app/'+files.fileUploaded.name, function(err) {
 
         if (err)
             throw err;
