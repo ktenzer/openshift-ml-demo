@@ -5,7 +5,6 @@ var path = require('path');     //used for file path
 var fs =require('fs-extra');    //File System-needed for renaming file etc
 var mv = require('mv');
 var exec = require('child_process').exec;
-var output = '';
 
 var app = express();
 app.use(express.static(path.join(__dirname, 'static')));
@@ -26,8 +25,8 @@ app.use(bodyParser.urlencoded({
     form.keepExtensions = true;     //keep file extension
 
     form.parse(req, function(err, fields, files) {
-        res.writeHead(200, {'content-type': 'text/plain'});
-        res.write('received upload:\n\n');
+        //res.writeHead(200, {'content-type': 'text/plain'});
+        //res.write('received upload:\n\n');
         console.log("form.bytesReceived");
         //TESTING
         console.log("file size: "+JSON.stringify(files.fileUploaded.size));
@@ -36,25 +35,32 @@ app.use(bodyParser.urlencoded({
         console.log("file type: "+JSON.stringify(files.fileUploaded.type));
         console.log("astModifiedDate: "+JSON.stringify(files.fileUploaded.lastModifiedDate));
 
-        //Formidable changes the name of the uploaded file
-        //Rename the file to its original name
-//        fs.rename(files.fileUploaded.path, '/home/ktenzer/openshift-ml-demo/'+files.fileUploaded.name, function(err) {
+        //fs.rename(files.fileUploaded.path, '/home/ktenzer/openshift-ml-demo/'+files.fileUploaded.name, function(err) {
         mv(files.fileUploaded.path, '/app/'+files.fileUploaded.name, function(err) {
 
         if (err)
             throw err;
           console.log('renamed complete');  
         });
-        exec('ls -a',function (err, stdout, stderr){
-          //res.write(stdout.toString('utf8') + '\n\n');
-          //console.log(stdout.toString('utf8') + '\n\n');
-          //output = stdout.toString('utf8');
-          output = stdout;
-        });
-        console.log(output);
-        //res.write(output);
-        res.write('blabla:');
-        res.end();
+
+       const execSync = require('child_process').execSync;
+       var python_cmd = 'python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /home/fedora/models'
+       run_python = execSync(python_cmd);
+       //run_python = execSync('python2 translate.py --lang de --file demo.wav --models /home/fedora/models');
+
+        function display_stdout(callback) {
+          var spawn = require('child_process').spawn;
+          var command = spawn('cat', ['/tmp/output.txt']);
+          var result = '';
+          command.stdout.on('data', function(data) {
+            result += data.toString();
+          });
+          command.on('close', function(code) {
+            return callback(result);
+          });
+          console.log(result);
+        }
+        display_stdout(function(result) { res.send(result) });
     });
 });
 var server = app.listen(8080, function() {

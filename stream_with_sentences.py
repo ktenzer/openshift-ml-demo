@@ -42,12 +42,12 @@ for opt, arg in opts:
 
 # Set locale for translated language or use default locale
 LOCALE = TRANSLATION_LANGUAGE + "_" + TRANSLATION_LANGUAGE.upper() + ".utf8"
-print "Locale set to " + LOCALE
+print "Locale set to " + LOCALE + "\n"
 
 try: 
     locale.setlocale(locale.LC_ALL, LOCALE)
 except locale.Error:
-    print "WARNING: Locale " + LOCALE + " not found. Ensure you have language pack installed! Falling back to default LOCALE" 
+    print "WARNING: Locale " + LOCALE + " not found. Ensure you have language pack installed! Falling back to default LOCALE" + "\n"
     locale.setlocale(locale.LC_ALL, '')
 
 MODEL = MODEL_DIR + "/output_graph.pbmm"
@@ -156,7 +156,7 @@ def vad_collector(sample_rate, frame_duration_ms,
 
 translator = googletrans.Translator()
 
-print('Initializing model...')
+print('Initializing model...') + "\n"
 
 corrector = jamspell.TSpellCorrector()
 corrector.LoadLangModel('en.bin')
@@ -244,10 +244,12 @@ try:
     stdscr.addstr(0, 0, wrapped_text)
     stdscr.addstr(15, 0, wrapped_translated_text, curses.color_pair(1))
     stdscr.refresh()
-    time.sleep(20)
+    time.sleep(5)
 except KeyboardInterrupt:
     pass
 finally:
     curses.echo()
     curses.nocbreak()
     curses.endwin()
+    print wrapped_text + "\n"
+    print wrapped_translated_text + "\n"
