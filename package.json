@@ -1,6 +1,6 @@
 {
   "name": "openshift-ml-demo",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "Machine Learning Demo built using Mozilla Deepspeech and Google Translate",
   "author": "Keith Tenzer",
   "license": "Apache2",
@@ -11,7 +11,6 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "child_process": "^1.0.2",
-    "console-log-html": "^2.0.2",
     "express": "^4.16.4",
     "formidable": "^1.2.1",
     "fs-extra": "^7.0.1",
