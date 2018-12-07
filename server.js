@@ -5,7 +5,7 @@ var path = require('path');     //used for file path
 var fs =require('fs-extra');    //File System-needed for renaming file etc
 
 var app = express();
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'static')));
 
 /* ========================================================== 
  bodyParser() required to allow Express to see the uploaded files
