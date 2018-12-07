@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "formidable": "*",
-    "http": "*",
-    "fs": "*"
+    "express": "*",
+    "body-parser": "*",
+    "path": "*",
+    "fs-extra": "*"
   }
 }

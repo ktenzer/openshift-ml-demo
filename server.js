@@ -1,34 +1,45 @@
-var http = require('http');
+var express = require('express');   //Express Web Server 
+var bodyParser = require('body-parser'); //connects bodyParsing middleware
 var formidable = require('formidable');
-var fs = require('fs');
+var path = require('path');     //used for file path
+var fs =require('fs-extra');    //File System-needed for renaming file etc
 
-http.createServer(function (req, res) {
-  if (req.url == '/fileupload') {
-    var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      var oldpath = files.filetoupload.path;
-      var newpath = '/app/' + files.filetoupload.name;
-      fs.rename(oldpath, newpath, function (err) {
-        if (err) throw err;
-        //res.write('File uploaded and moved!');
-        //res.end();
-        function runSingleCommandWithWait() {
-          Promise.coroutine(function *() {
-            var response = yield cmd.run('node --version');
-            if (err) throw err;
-            res.write(response.message);
-            res.end();
-            console.log('Executed your command :)');
-          })();
-        }
-      });
- });
-  } else {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<form action="fileupload" method="post" enctype="multipart/form-data">');
-    res.write('<input type="file" name="filetoupload"><br>');
-    res.write('<input type="submit">');
-    res.write('</form>');
-    return res.end();
-  }
-}).listen(8080);
+var app = express();
+app.use(express.static(path.join(__dirname, 'public')));
+
+/* ========================================================== 
+ bodyParser() required to allow Express to see the uploaded files
+============================================================ */
+app.use(bodyParser({defer: true}));
+ app.route('/upload')
+ .post(function (req, res, next) {
+
+  var form = new formidable.IncomingForm();
+    //Formidable uploads to operating systems tmp dir by default
+    form.uploadDir = "./img";       //set upload directory
+    form.keepExtensions = true;     //keep file extension
+
+    form.parse(req, function(err, fields, files) {
+        res.writeHead(200, {'content-type': 'text/plain'});
+        res.write('received upload:\n\n');
+        console.log("form.bytesReceived");
+        //TESTING
+        console.log("file size: "+JSON.stringify(files.fileUploaded.size));
+        console.log("file path: "+JSON.stringify(files.fileUploaded.path));
+        console.log("file name: "+JSON.stringify(files.fileUploaded.name));
+        console.log("file type: "+JSON.stringify(files.fileUploaded.type));
+        console.log("astModifiedDate: "+JSON.stringify(files.fileUploaded.lastModifiedDate));
+
+        //Formidable changes the name of the uploaded file
+        //Rename the file to its original name
+        fs.rename(files.fileUploaded.path, './img/'+files.fileUploaded.name, function(err) {
+        if (err)
+            throw err;
+          console.log('renamed complete');  
+        });
+          res.end();
+    });
+});
+var server = app.listen(8080, function() {
+console.log('Listening on port %d', server.address().port);
+});
