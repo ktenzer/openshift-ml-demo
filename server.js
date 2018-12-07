@@ -5,7 +5,6 @@ var path = require('path');     //used for file path
 //var fs =require('fs-extra');    //File System-needed for renaming file etc
 var mv = require('mv');
 var exec = require('child_process').exec;
-var shell = require('shelljs');
 
 var app = express();
 app.use(express.static(path.join(__dirname, 'static')));
@@ -50,15 +49,10 @@ app.use(bodyParser.urlencoded({
         //run_python = execSync(python_cmd);
         //run_python = execSync('python2 translate.py --lang de --file demo.wav --models /home/fedora/models');
 
-        if (shell.exec('python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models').code !== 0) {
-          shell.echo('Error: translate.py failed');
-          shell.exit(1);
-        }
-
-
         function display_stdout(callback) {
           var spawn = require('child_process').spawn;
-          var command = spawn('cat', ['/tmp/output.txt']);
+          //var command = spawn('cat', ['/tmp/output.txt']);
+          var command = spawn('ls', ['-la']);
           var result = '';
           command.stdout.on('data', function(data) {
             result += data.toString();
