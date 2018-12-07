@@ -2,9 +2,8 @@ var express = require('express');   //Express Web Server
 var bodyParser = require('body-parser'); //connects bodyParsing middleware
 var formidable = require('formidable');
 var path = require('path');     //used for file path
-//var fs =require('fs-extra');    //File System-needed for renaming file etc
 var mv = require('mv');
-var exec = require('child_process').exec;
+var cmd=require('node-cmd');
 
 var app = express();
 app.use(express.static(path.join(__dirname, 'static')));
@@ -16,7 +15,25 @@ app.use(express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
- app.route('/upload')
+
+app.post('/results', function (req, res) {
+  console.log("results button clicked ");
+  function display_stdout(callback) {
+    var spawn = require('child_process').spawn;
+    var command = spawn('cat', ['/tmp/output.txt']);
+    var result = '';
+    command.stdout.on('data', function(data) {
+      result += data.toString();
+    });
+      command.on('close', function(code) {
+      return callback(result);
+    });
+    console.log(result);
+  }
+  display_stdout(function(result) { res.send(result) });
+});
+
+app.route('/upload')
  .post(function (req, res, next) {
 
   var form = new formidable.IncomingForm();
@@ -35,7 +52,6 @@ app.use(bodyParser.urlencoded({
         console.log("file type: "+JSON.stringify(files.fileUploaded.type));
         console.log("astModifiedDate: "+JSON.stringify(files.fileUploaded.lastModifiedDate));
 
-        //fs.rename(files.fileUploaded.path, '/home/ktenzer/openshift-ml-demo/'+files.fileUploaded.name, function(err) {
         mv(files.fileUploaded.path, '/app/'+files.fileUploaded.name, function(err) {
 
         if (err)
@@ -44,15 +60,17 @@ app.use(bodyParser.urlencoded({
         });
 
         //const execSync = require('child_process').execSync;
-        //var python_cmd = 'python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
+        var python_cmd = 'python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
         //cmd.run('python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models');
         //run_python = execSync(python_cmd);
         //run_python = execSync('python2 translate.py --lang de --file demo.wav --models /home/fedora/models');
+        cmd.run(python_cmd);
+        res.redirect('/');
 
+/*
         function display_stdout(callback) {
           var spawn = require('child_process').spawn;
-          //var command = spawn('cat', ['/tmp/output.txt']);
-          var command = spawn('ls', ['-la']);
+          var command = spawn('cat', ['/tmp/output.txt']);
           var result = '';
           command.stdout.on('data', function(data) {
             result += data.toString();
@@ -63,9 +81,10 @@ app.use(bodyParser.urlencoded({
           console.log(result);
         }
         display_stdout(function(result) { res.send(result) });
+*/
     });
 });
+
 var server = app.listen(8080, function() {
 console.log('Listening on port %d', server.address().port);
 });
-server.timeout = 500000;
