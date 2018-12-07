@@ -3,6 +3,9 @@ var bodyParser = require('body-parser'); //connects bodyParsing middleware
 var formidable = require('formidable');
 var path = require('path');     //used for file path
 var fs =require('fs-extra');    //File System-needed for renaming file etc
+var mv = require('mv');
+var exec = require('child_process').exec;
+var output = '';
 
 var app = express();
 app.use(express.static(path.join(__dirname, 'static')));
@@ -32,19 +35,25 @@ app.use(bodyParser({defer: true}));
 
         //Formidable changes the name of the uploaded file
         //Rename the file to its original name
-        fs.rename(files.fileUploaded.path, '/app/'+files.fileUploaded.name, function(err) {
-
-        exec('ls -a',function (err, stdout, stderr){
-          res.write(stdout.toString('utf8'));
-        });
+//        fs.rename(files.fileUploaded.path, '/home/ktenzer/openshift-ml-demo/'+files.fileUploaded.name, function(err) {
+        mv(files.fileUploaded.path, '/home/ktenzer/openshift-ml-demo/'+files.fileUploaded.name, function(err) {
 
         if (err)
             throw err;
           console.log('renamed complete');  
         });
-          res.end();
+        exec('ls -a',function (err, stdout, stderr){
+          //res.write(stdout.toString('utf8') + '\n\n');
+          //console.log(stdout.toString('utf8') + '\n\n');
+          //output = stdout.toString('utf8');
+          output = stdout;
+        });
+        console.log(output);
+        //res.write(output);
+        res.write('blabla:');
+        res.end();
     });
 });
-var server = app.listen(8080, function() {
+var server = app.listen(5050, function() {
 console.log('Listening on port %d', server.address().port);
 });
