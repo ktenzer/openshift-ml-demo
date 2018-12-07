@@ -5,6 +5,7 @@ var path = require('path');     //used for file path
 //var fs =require('fs-extra');    //File System-needed for renaming file etc
 var mv = require('mv');
 var exec = require('child_process').exec;
+var shell = require('shelljs');
 
 var app = express();
 app.use(express.static(path.join(__dirname, 'static')));
@@ -43,10 +44,17 @@ app.use(bodyParser.urlencoded({
           console.log('renamed complete');  
         });
 
-        const execSync = require('child_process').execSync;
-        var python_cmd = 'python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
-        run_python = execSync(python_cmd);
+        //const execSync = require('child_process').execSync;
+        //var python_cmd = 'python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
+        //cmd.run('python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models');
+        //run_python = execSync(python_cmd);
         //run_python = execSync('python2 translate.py --lang de --file demo.wav --models /home/fedora/models');
+
+        if (shell.exec('python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models').code !== 0) {
+          shell.echo('Error: translate.py failed');
+          shell.exit(1);
+        }
+
 
         function display_stdout(callback) {
           var spawn = require('child_process').spawn;
@@ -60,8 +68,7 @@ app.use(bodyParser.urlencoded({
           });
           console.log(result);
         }
-        //display_stdout(function(result) { res.send(result) });
-        res.send("this is test");
+        display_stdout(function(result) { res.send(result) });
     });
 });
 var server = app.listen(8080, function() {
