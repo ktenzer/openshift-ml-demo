@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "formidable": "*",
-    "http": "*"
+    "http": "*",
     "fs": "*"
   }
 }
