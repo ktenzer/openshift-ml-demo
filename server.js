@@ -13,7 +13,10 @@ app.use(express.static(path.join(__dirname, 'static')));
 /* ========================================================== 
  bodyParser() required to allow Express to see the uploaded files
 ============================================================ */
-app.use(bodyParser({defer: true}));
+//app.use(bodyParser({defer: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
  app.route('/upload')
  .post(function (req, res, next) {
 
@@ -54,6 +57,6 @@ app.use(bodyParser({defer: true}));
         res.end();
     });
 });
-var server = app.listen(5050, function() {
+var server = app.listen(8080, function() {
 console.log('Listening on port %d', server.address().port);
 });
