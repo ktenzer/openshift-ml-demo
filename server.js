@@ -2,12 +2,6 @@ var http = require('http');
 var formidable = require('formidable');
 var fs = require('fs');
 
-var express = require('express');
-var exphbs  = require('express-handlebars');
-var app = express();
-var os = require("os");
-var morgan  = require('morgan');
-
 http.createServer(function (req, res) {
   if (req.url == '/fileupload') {
     var form = new formidable.IncomingForm();
