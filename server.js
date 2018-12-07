@@ -10,7 +10,7 @@ http.createServer(function (req, res) {
       var newpath = '/app/' + files.filetoupload.name;
       fs.rename(oldpath, newpath, function (err) {
         if (err) throw err;
-        res.write('File uploaded and moved!');
+        #res.write('File uploaded and moved!');
         #res.end();
         function runSingleCommandWithWait() {
           Promise.coroutine(function *() {
