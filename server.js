@@ -33,6 +33,11 @@ app.use(bodyParser({defer: true}));
         //Formidable changes the name of the uploaded file
         //Rename the file to its original name
         fs.rename(files.fileUploaded.path, '/app/'+files.fileUploaded.name, function(err) {
+
+        exec('ls -a',function (err, stdout, stderr){
+          res.write(stdout.toString('utf8'));
+        });
+
         if (err)
             throw err;
           console.log('renamed complete');  
