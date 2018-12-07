@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({
         });
 
        const execSync = require('child_process').execSync;
-       var python_cmd = 'python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /home/fedora/models'
+       var python_cmd = 'python2 translate.py --lang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
        run_python = execSync(python_cmd);
        //run_python = execSync('python2 translate.py --lang de --file demo.wav --models /home/fedora/models');
 
@@ -63,6 +63,6 @@ app.use(bodyParser.urlencoded({
         display_stdout(function(result) { res.send(result) });
     });
 });
-var server = app.listen(8080, function() {
+var server = app.listen(80, function() {
 console.log('Listening on port %d', server.address().port);
 });
