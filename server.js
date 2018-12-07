@@ -11,7 +11,7 @@ http.createServer(function (req, res) {
       fs.rename(oldpath, newpath, function (err) {
         if (err) throw err;
         res.write('File uploaded and moved!');
-        res.end();
+        #res.end();
         function runSingleCommandWithWait() {
           Promise.coroutine(function *() {
             var response = yield cmd.run('node --version');
