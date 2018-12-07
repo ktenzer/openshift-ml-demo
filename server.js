@@ -2,6 +2,12 @@ var http = require('http');
 var formidable = require('formidable');
 var fs = require('fs');
 
+var express = require('express');
+var exphbs  = require('express-handlebars');
+var app = express();
+var os = require("os");
+var morgan  = require('morgan');
+
 http.createServer(function (req, res) {
   if (req.url == '/fileupload') {
     var form = new formidable.IncomingForm();
@@ -10,8 +16,8 @@ http.createServer(function (req, res) {
       var newpath = '/app/' + files.filetoupload.name;
       fs.rename(oldpath, newpath, function (err) {
         if (err) throw err;
-        #res.write('File uploaded and moved!');
-        #res.end();
+        //res.write('File uploaded and moved!');
+        //res.end();
         function runSingleCommandWithWait() {
           Promise.coroutine(function *() {
             var response = yield cmd.run('node --version');
