@@ -15,20 +15,30 @@ import os
 import codecs
 import sys
 
+# workaround to fix decoding non-ascii chars
+#reload(sys)  
+#sys.setdefaultencoding('utf8')
 
+SOURCE_LANGUAGE = ''
 TRANSLATION_LANGUAGE = ''
 WAVE_FILE = ''
 MODEL_DIR = ''
 
-output=open('/tmp/output.txt', 'w+')
-UTF8Writer = codecs.getwriter('utf8')
-output = UTF8Writer(output)
+# check if output file exists and delete
+if os.path.exists('/tmp/output.txt'):
+  os.remove('/tmp/output.txt')
+
+output=open('/tmp/output.txt', 'a+')
+
+# needed if writing to file after translation
+#UTF8Writer = codecs.getwriter('utf8')
+#output = UTF8Writer(output)
 
 def usage():
-    print "Usage:" + sys.argv[0] + " --lang <en|de|es|fr|pl> --file </path/to/.wav> --models </path/to/models>"
+    print "Usage:" + sys.argv[0] + " --slang <en|fr|ru> --tlang <en|de|es|fr|pl> --file </path/to/.wav> --models </path/to/models>"
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'l:f:m:h', ['lang=', 'file=', 'models=', 'help'])
+    opts, args = getopt.getopt(sys.argv[1:], 's:t:f:m:h', ['slang=', 'tlang=', 'file=', 'models=', 'help'])
 except getopt.GetoptError:
     usage()
     sys.exit(2)
@@ -37,7 +47,9 @@ for opt, arg in opts:
     if opt in ('-h', '--help'):
         usage()
         sys.exit(2)
-    elif opt in ('-l', '--lang'):
+    elif opt in ('-s', '--slang'):
+        SOURCE_LANGUAGE = arg
+    elif opt in ('-t', '--tlang'):
         TRANSLATION_LANGUAGE = arg
     elif opt in ('-f', '--file'):
         WAVE_FILE = arg
@@ -49,20 +61,18 @@ for opt, arg in opts:
 
 # Set locale for translated language or use default locale
 LOCALE = TRANSLATION_LANGUAGE + "_" + TRANSLATION_LANGUAGE.upper() + ".utf8"
-#print "Locale set to " + LOCALE
-output.write('Locale set to ' + LOCALE +  '</br>' + '\n') ; sys.stdout.flush()
+output.write(u'Locale set to ' + LOCALE +  '</br>' + '\n') ; sys.stdout.flush()
 
 try: 
     locale.setlocale(locale.LC_ALL, LOCALE)
 except locale.Error:
-    #print "WARNING: Locale " + LOCALE + " not found. Ensure you have language pack installed! Falling back to default LOCALE" 
-    output.write('WARNING: Locale ' + LOCALE + ' not found. Ensure you have language pack installed! Falling back to default LOCALE' +  + '</br>' + '\n') ; sys.stdout.flush()
+    output.write(u'WARNING: Locale ' + LOCALE + ' not found. Ensure you have language pack installed! Falling back to default LOCALE' +  + '</br>' + '\n') ; sys.stdout.flush()
     locale.setlocale(locale.LC_ALL, '')
 
-MODEL = MODEL_DIR + "/output_graph.pbmm"
-ALPHABET = MODEL_DIR + "/alphabet.txt"
-LM = MODEL_DIR + "/lm.binary"
-TRIE = MODEL_DIR + "/trie"
+MODEL = MODEL_DIR + '/output_graph.pbmm'
+ALPHABET = MODEL_DIR + '/alphabet.txt'
+LM = MODEL_DIR + '/lm.binary'
+TRIE = MODEL_DIR + '/trie'
 
 LM_WEIGHT = 1.50
 VALID_WORD_COUNT_WEIGHT = 2.25
@@ -165,11 +175,10 @@ def vad_collector(sample_rate, frame_duration_ms,
 
 translator = googletrans.Translator()
 
-#print('Initializing model...')
-output.write('Initializing model...' + '</br>' + '\n') ; sys.stdout.flush()
+output.write(u'Initializing model...' + '</br>' + '\n') ; sys.stdout.flush()
 
 corrector = jamspell.TSpellCorrector()
-corrector.LoadLangModel('en.bin')
+corrector.LoadLangModel(MODEL_DIR + '/' + SOURCE_LANGUAGE + '.bin')
 
 model = ds.Model(MODEL, N_FEATURES, N_CONTEXT, ALPHABET, BEAM_WIDTH)
 model.enableDecoderWithLM(ALPHABET, LM, TRIE, LM_WEIGHT,
@@ -191,6 +200,9 @@ data_array = bytearray()
 # cache format, keyed by segment number:
 # {1: {'length': x, 'corrected': y, 'translated': z}}
 segment_cache = {}
+
+output.write('</br>' + '### START TRANSLATION ###' + '</br>' + '\n') ; sys.stdout.flush()
+output.close()
 
 try:
     while True:
@@ -225,6 +237,10 @@ try:
                                        '' if not translated_text else ' ',
                                        segment_cache[i]['translated']])
 
+            output=open('/tmp/output.txt', 'a+')
+            output.write('<br>' + text + '</br>' + '\n') ; sys.stdout.flush()
+            output.write(translated_text  + '</br>' + '\n') ; sys.stdout.flush()
+            output.close()
         if not text:
             continue
 
@@ -233,6 +249,6 @@ try:
 except KeyboardInterrupt:
     pass
 finally:
-    output.write(text + '</br>' + '\n') ; sys.stdout.flush()
-    output.write(translated_text  + '</br>' + '\n') ; sys.stdout.flush()
+    output=open('/tmp/output.txt', 'a+')
+    output.write('</br>' + '### END TRANSLATION ###' + '</br>' + '\n') ; sys.stdout.flush()
     output.close()
