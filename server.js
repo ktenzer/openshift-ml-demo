@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+//post results from learned wav files
 app.post('/results', function (req, res) {
   function display_stdout(callback) {
     var spawn = require('child_process').spawn;
@@ -29,8 +30,10 @@ app.post('/results', function (req, res) {
     console.log(result);
   }
   display_stdout(function(result) { res.send(result) });
+
 });
 
+//upload wav file and decode/translate using python
 app.route('/upload')
  .post(function (req, res, next) {
 
@@ -42,15 +45,6 @@ app.route('/upload')
     form.parse(req, function(err, fields, files) {
         console.log("form.bytesReceived");
 
-        // Debug
-        //console.log("file size: "+JSON.stringify(files.fileUploaded.size));
-        //console.log("file path: "+JSON.stringify(files.fileUploaded.path));
-        //console.log("file name: "+JSON.stringify(files.fileUploaded.name));
-        //console.log("file type: "+JSON.stringify(files.fileUploaded.type));
-        //console.log("lastModifiedDate: "+JSON.stringify(files.fileUploaded.lastModifiedDate));
-
-        //mv(files.fileUploaded.path, '/app/'+files.fileUploaded.name, function(err) {
-
         if (err)
             throw err;
 
@@ -61,18 +55,29 @@ app.route('/upload')
           console.log("file type: "+JSON.stringify(files.fileUploaded.type));
           console.log("lastModifiedDate: "+JSON.stringify(files.fileUploaded.lastModifiedDate));
 
+          //move file from temp location
           mv(files.fileUploaded.path, '/app/'+files.fileUploaded.name, function(err) {
           console.log('file uploaded and renamed');  
 
+          //execute python voice recognition and translation program
           var python_cmd = 'python2 translate.py --slang en --tlang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
-          cmd.run(python_cmd);
-        });
+          cmd.get(python_cmd, 
+            function(err, data, stderr){
+              if (!err) {
+                 console.log(python_cmd + ' succeeded:',data)
+              } else {
+                 console.log(python_cmd + ' failed!', err)
+              }
+            }
+          );
+     });
 
         res.redirect('/');
 
     });
 });
 
+//start http listener
 var server = app.listen(8080, function() {
 console.log('Listening on port %d', server.address().port);
 });
