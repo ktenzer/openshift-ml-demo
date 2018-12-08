@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # download models if necessary
+sleep 2
 if [ ! -d /deepspeech/models ]; then 
     echo "Downloading deepspeech models"
     wget https://github.com/mozilla/DeepSpeech/releases/download/v0.3.0/deepspeech-0.3.0-models.tar.gz -P /deepspeech
@@ -9,6 +10,7 @@ if [ ! -d /deepspeech/models ]; then
 fi
 
 if [ ! -f /deepspeech/models/en.bin ]; then 
+    sleep 2
     echo "Downloading en spelling models for jamspell"
     wget https://github.com/bakwc/JamSpell-models/raw/master/en.tar.gz -P /deepspeech
     tar xzf /deepspeech/en.tar.gz -C /deepspeech/models
@@ -16,6 +18,7 @@ if [ ! -f /deepspeech/models/en.bin ]; then
 fi
 
 if [ ! -f /deepspeech/models/fr.bin ]; then 
+    sleep 2
     echo "Downloading fr spelling models for jamspell"
     wget https://github.com/bakwc/JamSpell-models/raw/master/fr.tar.gz -P /deepspeech
     tar xzf /deepspeech/fr.tar.gz -C /deepspeech/models
@@ -23,6 +26,7 @@ if [ ! -f /deepspeech/models/fr.bin ]; then
 fi
 
 if [ ! -f /deepspeech/models/ru.bin ]; then 
+    sleep 2
     echo "Downloading ru spelling models for jamspell"
     wget https://github.com/bakwc/JamSpell-models/raw/master/ru.tar.gz -P /deepspeech
     tar xzf /deepspeech/ru.tar.gz -C /deepspeech/models
@@ -30,8 +34,9 @@ if [ ! -f /deepspeech/models/ru.bin ]; then
 fi
 
 if [ -f /deepspeech/models/ru_small.bin ]; then 
+    sleep 2
     echo "Renaming ru spell model"
-   mv /deepspeech/models/ru_small.bin /deepspeech/models/ru.bin
+    mv /deepspeech/models/ru_small.bin /deepspeech/models/ru.bin
 fi
 
 echo "Starting nodejs"
