@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Ensure models tarball are deleted
+if [ -f /deepspeech/deepspeech-0.3.0-models.tar.gz ]; then 
+    rm -f /deepspeech/deepspeech-0.3.0-models.tar.gz
+fi
+
 # download models if necessary
 sleep 2
 if [ ! -d /deepspeech/models ]; then 
