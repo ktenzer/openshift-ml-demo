@@ -15,27 +15,54 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-//post results from learned wav files
-app.post('/results', function (req, res) {
-  function display_stdout(callback) {
-    var spawn = require('child_process').spawn;
-    var command = spawn('cat', ['/tmp/output.txt']);
-    var result = '';
-    command.stdout.on('data', function(data) {
-      result += data.toString();
-    });
-      command.on('close', function(code) {
-      return callback(result);
-    });
-    console.log(result);
-  }
-  display_stdout(function(result) { res.send(result) });
+//display results
+function display_stdout(res) {
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.write('<html>');
+  res.write('<body>');
+  res.write('<h1> Translated Results </h1>')
+  res.write('<form action="/refresh" method = "post">');
+  res.write('<button>Refresh</button>');
+  res.write('</form>');
+  res.write('<form action="/" method = "post">');
+  res.write('<button>Home</button>');
+  res.write('</form>');
 
+
+  var spawn = require('child_process').spawn;
+  var command = spawn('cat', ['/tmp/output.txt']);
+  var result = '';
+  command.stdout.on('data', function(data) {
+    result += data.toString();
+    res.write('<h4>' + result + '</h4>');
+  });
+    command.on('close', function(code) {
+      res.end();
+  });
+  console.log(result);
+}
+
+//home route
+app.route('/')
+  .post(function (req, res, next) {
+  res.redirect('/');
 });
 
-//upload wav file and decode/translate using python
+//refresh the results page route
+app.route('/refresh')
+  .post(function (req, res, next) {
+  display_stdout(res);
+});
+
+//Initial results page route
+app.route('/results')
+  .post(function (req, res, next) {
+  display_stdout(res);
+});
+
+//upload wav file and decode/translate using python route
 app.route('/upload')
- .post(function (req, res, next) {
+  .post(function (req, res, next) {
 
   var form = new formidable.IncomingForm();
     //Formidable uploads to operating systems tmp dir by default
@@ -73,11 +100,10 @@ app.route('/upload')
      });
 
         res.redirect('/');
-
     });
 });
 
 //start http listener
-var server = app.listen(8080, function() {
+var server = app.listen(80, function() {
 console.log('Listening on port %d', server.address().port);
 });
