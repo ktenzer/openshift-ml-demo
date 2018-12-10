@@ -76,6 +76,7 @@ app.route('/upload')
             throw err;
 
           // Debug
+          console.log("Selected language " + fields.optradio);
           console.log("file size: "+JSON.stringify(files.fileUploaded.size));
           console.log("file path: "+JSON.stringify(files.fileUploaded.path));
           console.log("file name: "+JSON.stringify(files.fileUploaded.name));
@@ -87,7 +88,7 @@ app.route('/upload')
           console.log('file uploaded and renamed');  
 
           //execute python voice recognition and translation program
-          var python_cmd = 'python2 translate.py --slang en --tlang de --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
+          var python_cmd = 'python2 translate.py --slang en --tlang ' + fields.optradio + ' --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
           cmd.get(python_cmd, 
             function(err, data, stderr){
               if (!err) {

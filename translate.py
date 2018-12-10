@@ -66,7 +66,7 @@ output.write(u'Locale set to ' + LOCALE +  '</br>' + '\n') ; sys.stdout.flush()
 try: 
     locale.setlocale(locale.LC_ALL, LOCALE)
 except locale.Error:
-    output.write(u'WARNING: Locale ' + LOCALE + ' not found. Ensure you have language pack installed! Falling back to default LOCALE' +  + '</br>' + '\n') ; sys.stdout.flush()
+    output.write('WARNING: Locale ' + LOCALE + ' not found. Ensure you have language pack installed! Falling back to default LOCALE' + '</br>' + '\n') ; sys.stdout.flush()
     locale.setlocale(locale.LC_ALL, '')
 
 MODEL = MODEL_DIR + '/output_graph.pbmm'
