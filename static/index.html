@@ -7,7 +7,14 @@
 
 <body>
         <h1> Machine Learning Demo App using Mozilla Deepspeech and Google Translate </h1>
-        <h2> Choose 16khz, 16bit mono recorded audio wave file, choose the translation language and click submit. The wave file will be uploaded, decoded and translated. Click results and refresh to see the text and translation. </h2>
+        <h2> Choose audio wave file, choose the translation language and click submit. The wave file will be uploaded, decoded and translated. Click results and refresh to see the text and translation. </h2>
+        <h3> Audio File Requirements
+        <ul>
+          <li> 16000 Herz
+          <li> 16bit
+          <li> Mono
+        </ul></h3>
+        
         <img src="mozilla_logo.jpg" alt="Mozilla Deepspeech"> 
         <form method='post' action='upload' enctype="multipart/form-data">
           <input type='file' name='fileUploaded' required></br>
