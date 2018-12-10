@@ -70,41 +70,41 @@ app.route('/upload')
     form.keepExtensions = true;     //keep file extension
 
     form.parse(req, function(err, fields, files) {
-        console.log("form.bytesReceived");
+      console.log("form.bytesReceived");
 
-        if (err)
-            throw err;
+      if (err)
+        throw err;
 
-          // Debug
-          console.log("Selected language " + fields.optradio);
-          console.log("file size: "+JSON.stringify(files.fileUploaded.size));
-          console.log("file path: "+JSON.stringify(files.fileUploaded.path));
-          console.log("file name: "+JSON.stringify(files.fileUploaded.name));
-          console.log("file type: "+JSON.stringify(files.fileUploaded.type));
-          console.log("lastModifiedDate: "+JSON.stringify(files.fileUploaded.lastModifiedDate));
+        // Debug
+        console.log("Selected language " + fields.optradio);
+        console.log("file size: "+JSON.stringify(files.fileUploaded.size));
+        console.log("file path: "+JSON.stringify(files.fileUploaded.path));
+        console.log("file name: "+JSON.stringify(files.fileUploaded.name));
+        console.log("file type: "+JSON.stringify(files.fileUploaded.type));
+        console.log("lastModifiedDate: "+JSON.stringify(files.fileUploaded.lastModifiedDate));
 
-          //move file from temp location
-          mv(files.fileUploaded.path, '/app/'+files.fileUploaded.name, function(err) {
-          console.log('file uploaded and renamed');  
+        //move file from temp location
+        mv(files.fileUploaded.path, '/app/'+files.fileUploaded.name, function(err) {
+        console.log('file uploaded and renamed');  
 
-          //execute python voice recognition and translation program
-          var python_cmd = 'python2 translate.py --slang en --tlang ' + fields.optradio + ' --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
-          cmd.get(python_cmd, 
-            function(err, data, stderr){
-              if (!err) {
-                 console.log(python_cmd + ' succeeded:',data)
-              } else {
-                 console.log(python_cmd + ' failed!', err)
-              }
+        //execute python voice recognition and translation program
+        var python_cmd = 'python2 translate.py --slang en --tlang ' + fields.optradio + ' --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
+        cmd.get(python_cmd, 
+          function(err, data, stderr) {
+            if (!err) {
+              console.log(python_cmd + ' succeeded:',data)
+            } else {
+              console.log(python_cmd + ' failed!', err)
             }
-          );
-     });
+          }
+        );
+      });
 
-        res.redirect('/');
+      res.redirect('/');
     });
 });
 
 //start http listener
-var server = app.listen(8080, function() {
+var server = app.listen(80, function() {
 console.log('Listening on port %d', server.address().port);
 });

@@ -10,7 +10,7 @@
         <h2> Choose 16khz, 16bit audio wave file, choose the translation language and click submit. The wave file will be uploaded, decoded and translated. Click results and refresh to see the text and translation. </h2>
         <img src="mozilla_logo.jpg" alt="Mozilla Deepspeech"> 
         <form method='post' action='upload' enctype="multipart/form-data">
-          <input type='file' name='fileUploaded'></br>
+          <input type='file' name='fileUploaded' required></br>
           <div class="radio">
             <label class="radio-inline"><input type="radio" name="optradio" value="de" checked="checked">German</label>
             <label class="radio-inline"><input type="radio" name="optradio" value="fr">French</label>
@@ -18,7 +18,7 @@
             <label class="radio-inline"><input type="radio" name="optradio" value="pl">Polish</label>
           </div>
           <input type='submit'>
-          <button type="submit" class="btn btn-primary btn-lg" formaction="/results">Results</button>
+          <button type="submit" class="btn btn-primary btn-lg" formaction="/results" formnovalidate>Results</button>
         </form>
         
  </body>
