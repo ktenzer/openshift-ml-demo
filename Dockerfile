@@ -33,9 +33,8 @@ RUN pip2 install 'deepspeech==0.3.0' \
 RUN cd /tmp/deepspeech && \
     git clone https://github.com/BoseCorp/py-googletrans.git && \
     cd /tmp/deepspeech/py-googletrans && \
-    python2 /tmp/deepspeech/py-googletrans/setup.py install
-
-RUN rm -rf /tmp/deepspeech
+    python2 /tmp/deepspeech/py-googletrans/setup.py install && \
+    rm -rf /tmp/deepspeech
 
 RUN mkdir /app
 
