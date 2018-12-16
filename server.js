@@ -17,8 +17,10 @@ app.use(bodyParser.urlencoded({
 
 //display results
 function display_stdout(res) {
+
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.write('<html>');
+  res.write('<head><meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" charset="UTF-8"><title>Machine Learning Demo App</title></head>');
   res.write('<body>');
   res.write('<h1> Translated Results </h1>')
   res.write('<form action="/refresh" method = "post">');
