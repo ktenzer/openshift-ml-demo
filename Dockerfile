@@ -48,7 +48,9 @@ RUN npm install
 
 RUN chown -R 1001:0 /app && \
     chown -R 1001:0 /deepspeech && \
-    chmod -R ug+rwX /app
+    chmod -R ug+rwX /app && \
+    chmod -R ug+rwX /deepspeech
+
 
 RUN chmod -R 777 /tmp
 
