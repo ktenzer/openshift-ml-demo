@@ -53,9 +53,6 @@ objects:
         type: Git
     strategy:
       dockerStrategy:
-        from:
-          kind: ImageStreamTag
-          name: fedora:latest
       type: Docker
     triggers:
     - github:
@@ -146,28 +143,6 @@ objects:
         type: ""
   status:
     dockerImageRepository: ""
-- apiVersion: v1
-  kind: ImageStream
-  metadata:
-    annotations:
-    generation: 2
-    labels:
-      app: "${APPLICATION_NAME}"
-    name: fedora
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-    - annotations:
-        openshift.io/imported-from: fedora:latest
-      from:
-        kind: DockerImage
-        name: fedora:latest
-      generation: 2
-      importPolicy: {}
-      name: latest
-      referencePolicy:
-        type: Source
 parameters:
   - name: APPLICATION_NAME
     displayName: Application Name
