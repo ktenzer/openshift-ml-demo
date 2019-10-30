@@ -1,0 +1,199 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: "Simple machine learning demo using tensorflow and deepspeech"
+  creationTimestamp: null
+  name: openshift-ml-demo
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      service.alpha.openshift.io/dependencies: '[{"name": "${APPLICATION_NAME}",
+        "namespace": "", "kind": "Service"}]'
+      service.openshift.io/infrastructure: "true"
+    name: ${APPLICATION_NAME}
+  spec:
+    ports:
+    - name: ${APPLICATION_NAME}
+      nodePort: 0
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      name: ${APPLICATION_NAME}
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      haproxy.router.openshift.io/timeout: 4m
+      template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
+    name: ${APPLICATION_NAME}
+  spec:
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: ${APPLICATION_NAME}
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: "${APPLICATION_NAME}"
+    name: "${APPLICATION_NAME}" 
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: "${APPLICATION_NAME}:latest"
+    runPolicy: Serial
+    source:
+      git:
+        uri: "${SOURCE_REPOSITORY_URL}" 
+        ref: "${SOURCE_REPOSITORY_REF}"
+        type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: fedora:latest
+      type: Docker
+    triggers:
+    - github:
+        secret: _Rn6FzszP2wVCdy5gn5A
+      type: GitHub
+    - generic:
+        secret: lDMTxQXebRt4VBgwXZ-f
+      type: Generic
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: "${APPLICATION_NAME}-model-data" 
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: "${STORAGE_CAPACITY}"
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: "true"
+    name: "${APPLICATION_NAME}" 
+  spec:
+    replicas: 1
+    selector:
+      app: "${APPLICATION_NAME}"
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: "${APPLICATION_NAME}"
+      spec:
+        containers:
+        - capabilities: {}
+          image: ' '
+          imagePullPolicy: IfNotPresent
+          name: "${APPLICATION_NAME}"
+          terminationMessagePath: /dev/termination-log
+          ports:
+          -containerPort: 8080
+          volumeMounts:
+          - mountPath: /deepspeech
+            name: "${APPLICATION_NAME}-model-data"
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        volumes:
+        - name: "${APPLICATION_NAME}-model-data" 
+          persistentVolumeClaim:
+            claimName: "${APPLICATION_NAME}-model-data"
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - "${APPLICATION_NAME}"
+        from:
+          kind: ImageStreamTag
+          name: "${APPLICATION_NAME}:latest"
+        lastTriggeredImage: ""
+      type: ImageChange
+    - type: ConfigChange
+  status: {}
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: "${APPLICATION_NAME}"
+    name: "${APPLICATION_NAME}"
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations: null
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+    generation: 2
+    labels:
+      app: "${APPLICATION_NAME}"
+    name: fedora
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: fedora:latest
+      from:
+        kind: DockerImage
+        name: fedora:latest
+      generation: 2
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+parameters:
+  - name: APPLICATION_NAME
+    displayName: Application Name
+    description: the name and label for all components
+    value: openshift-ml-demo
+    required: true
+  - name: APPLICATION_DOMAIN
+    displayName: Application Domain
+    description: Application domain name used in route to service
+  - name: SOURCE_REPOSITORY_URL
+    displayName: Source Repository URL
+    description: The URL of the repository with your application source code
+    value: https://github.com/ktenzer/openshift-ml-demo.git
+    required: true
+  - name: SOURCE_REPOSITORY_REF
+    displayName: Source Repository Reference Tag
+    description: The Branch tag to use
+    value: master
+  - name: STORAGE_CAPACITY
+    description: Storage needed for ML Models
+    value: 10Gi
