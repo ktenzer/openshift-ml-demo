@@ -55,7 +55,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: fedora:latest
+          name: fedora:29
       type: Docker
     triggers:
     - github:
@@ -159,10 +159,10 @@ objects:
       local: false
     tags:
     - annotations:
-        openshift.io/imported-from: fedora:latest
+        openshift.io/imported-from: fedora:29
       from:
         kind: DockerImage
-        name: fedora:latest
+        name: fedora:29
       generation: 2
       importPolicy: {}
       name: latest
