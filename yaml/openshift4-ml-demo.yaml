@@ -10,32 +10,24 @@ objects:
   kind: Service
   metadata:
     annotations:
-      service.alpha.openshift.io/dependencies: '[{"name": "${APPLICATION_NAME}",
-        "namespace": "", "kind": "Service"}]'
-      service.openshift.io/infrastructure: "true"
+      description: The web server's http port.
+    labels:
+      app: ${APPLICATION_NAME}
     name: ${APPLICATION_NAME}
   spec:
     ports:
-    - name: ${APPLICATION_NAME}
-      nodePort: 0
-      port: 80
-      protocol: TCP
+    - port: 80
       targetPort: 8080
     selector:
-      name: ${APPLICATION_NAME}
-    sessionAffinity: None
-    type: ClusterIP
+      app: ${APPLICATION_NAME}
 - apiVersion: v1
   kind: Route
   metadata:
     annotations:
-      haproxy.router.openshift.io/timeout: 4m
       template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
     name: ${APPLICATION_NAME}
   spec:
-    tls:
-      insecureEdgeTerminationPolicy: Redirect
-      termination: edge
+    host: ${APPLICATION_DOMAIN}
     to:
       kind: Service
       name: ${APPLICATION_NAME}
@@ -63,6 +55,15 @@ objects:
       dockerStrategy:
       type: Docker
     triggers:
+    - github:
+        secret: _Rn6FzszP2wVCdy5gn5A
+      type: GitHub
+    - generic:
+        secret: lDMTxQXebRt4VBgwXZ-f
+      type: Generic
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
   status:
     lastVersion: 0
 - apiVersion: v1
