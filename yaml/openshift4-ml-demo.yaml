@@ -4,7 +4,7 @@ metadata:
   annotations:
     description: "Simple machine learning demo using tensorflow and deepspeech"
   creationTimestamp: null
-  name: ${APPLICATION_NAME}
+  name: ml-demo
 objects:
 - apiVersion: v1
   kind: Service
