@@ -4,7 +4,7 @@ metadata:
   annotations:
     description: "Simple machine learning demo using tensorflow and deepspeech"
   creationTimestamp: null
-  name: openshift-ml-demo
+  name: ${APPLICATION_NAME}
 objects:
 - apiVersion: v1
   kind: Service
@@ -147,7 +147,7 @@ parameters:
   - name: APPLICATION_NAME
     displayName: Application Name
     description: the name and label for all components
-    value: openshift-ml-demo
+    value: ml-demo
     required: true
   - name: APPLICATION_DOMAIN
     displayName: Application Domain
