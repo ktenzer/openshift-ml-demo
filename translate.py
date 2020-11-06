@@ -15,6 +15,9 @@ import os
 import codecs
 import sys
 
+# workaround to ignore CPU optimizations
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 # workaround to fix decoding non-ascii chars
 #reload(sys)  
 #sys.setdefaultencoding('utf8')
