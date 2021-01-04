@@ -43,11 +43,11 @@ $ oc new-project ml-demo
 ```
 ### Create template in ml-demo project
 ```
-$ oc create -f openshift-ml-demo/openshift-ml-demo.yaml
+$ oc create -f openshift-ml-demo/yaml/openshift4-ml-demo.yaml
 ```
 ### Deploy template from project
 ```
-$ oc new-app openshift-ml-demo -n ml-demo
+$ oc new-app --template=ml-demo -n ml-demo
 ```
 ### Deploy just using Docker in OpenShift
 ```
