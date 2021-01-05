@@ -233,7 +233,9 @@ try:
                 segment_cache[i]['corrected'] = corrected
                 translated = translator.translate(corrected, src='en',
                                                   dest=TRANSLATION_LANGUAGE).text
-                segment_cache[i]['translated'] = translated.encode('utf-8')
+                # Fix to get working under python3
+                #segment_cache[i]['translated'] = translated.encode('utf-8')
+                segment_cache[i]['translated'] = translated
             text = ''.join([text, '' if not text else ' ',
                             segment_cache[i]['corrected']])
             translated_text = ''.join([translated_text,
