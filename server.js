@@ -90,7 +90,7 @@ app.route('/upload')
         console.log('file uploaded and renamed');  
 
         //execute python voice recognition and translation program
-        var python_cmd = 'python2 translate.py --slang en --tlang ' + fields.optradio + ' --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
+        var python_cmd = 'python3 translate.py --slang en --tlang ' + fields.optradio + ' --file /app/' + files.fileUploaded.name + ' --models /deepspeech/models'
         cmd.get(python_cmd, 
           function(err, data, stderr) {
             if (!err) {
