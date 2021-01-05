@@ -23,19 +23,13 @@ RUN mkdir -p /tmp/deepspeech
 
 RUN pip2 install 'deepspeech==0.3.0' \
     jamspell \
+    googletrans \
     webrtcvad \
     requests \
     certifi \
     urllib3 \
     idna \
     chardet
-    
-RUN cd /tmp/deepspeech && \
-    git clone https://github.com/BoseCorp/py-googletrans.git && \
-    cd /tmp/deepspeech/py-googletrans && \
-    git checkout origin/feature/enhance-use-of-direct-api
-    python2 /tmp/deepspeech/py-googletrans/setup.py install && \
-    rm -rf /tmp/deepspeech    
 
 RUN mkdir /app
 
