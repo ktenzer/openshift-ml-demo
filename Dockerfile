@@ -23,6 +23,7 @@ RUN mkdir -p /tmp/deepspeech
 
 RUN pip2 install 'deepspeech==0.3.0' \
     jamspell \
+    parse \
     google_trans_new \
     webrtcvad \
     requests \
