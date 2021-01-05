@@ -1,7 +1,8 @@
 import deepspeech as ds
 import numpy as np
 import jamspell
-import googletrans
+#import googletrans
+from google_trans_new import google_translator 
 import sys
 import wave
 import webrtcvad
@@ -14,6 +15,8 @@ import locale
 import os
 import codecs
 import sys
+
+translator = google_translator() 
 
 # workaround to ignore CPU optimizations
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
