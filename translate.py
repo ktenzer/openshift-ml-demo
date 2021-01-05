@@ -38,7 +38,7 @@ output=open('/tmp/output.txt', 'a+')
 #output = UTF8Writer(output)
 
 def usage():
-    print "Usage:" + sys.argv[0] + " --slang <en|fr|ru> --tlang <en|de|es|fr|pl> --file </path/to/.wav> --models </path/to/models>"
+    print ("Usage:" + sys.argv[0] + " --slang <en|fr|ru> --tlang <en|de|es|fr|pl> --file </path/to/.wav> --models </path/to/models>")
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], 's:t:f:m:h', ['slang=', 'tlang=', 'file=', 'models=', 'help'])
